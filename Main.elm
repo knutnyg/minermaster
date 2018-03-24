@@ -1,5 +1,8 @@
-import Html exposing (Html, button, div, text)
+import Html exposing (Html, button, div, text, p)
 import Html.Events exposing (onClick)
+import Http exposing (..)
+import Json.Decode exposing (Decoder, int, string)
+import Json.Decode.Pipeline exposing (decode, required)
 
 
 main =
@@ -9,30 +12,48 @@ main =
 -- MODEL
 
 type alias Model =
-  { nodes : List Node
+  { node : Node
   , name : String
   }
 
 type alias Node =
   { name : String
-  , gpus : List Gpu
+  , url  : String
+  , uptime : Int
+  , id: Int
+  }
+type alias NodeRes =
+  { uptime : Int
+  , id : Int
   }
 
-type alias Gpu =
-  { name : String
-  , temp : Float
-  }
+
+-- HTTP
+fetch : Node -> Cmd Msg
+fetch node =
+  Http.send NodeDataFetched (Http.get node.url nodeDecoder)
+
+nodeDecoder : Decoder NodeRes
+nodeDecoder =
+    decode NodeRes
+        |> required "id" int
+        |> required "uptime" int
+
 
 -- UPDATE
 
-type Msg = Change
+type Msg = Fetch
+    | NodeDataFetched(Result Http.Error NodeRes)
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
-    Change ->
-       ({ model | name = model.name ++ "test" }, Cmd.none)
-
+    Fetch ->
+        (model, fetch model.node )
+    NodeDataFetched (Ok res) ->
+       ( { model | node = Node model.node.name model.node.url res.id res.uptime }, Cmd.none)
+    NodeDataFetched (Err _) ->
+       ( model, Cmd.none)
 
 
 -- VIEW
@@ -40,8 +61,16 @@ update msg model =
 view : Model -> Html Msg
 view model =
   div []
-    [ button [ onClick Change ] [ text "test"]
-    , div [] [ text (model.name) ]
+    [ button [ onClick Fetch ] [ text "fetch"]
+    , div []
+            [ text (model.name) ]
+    , div []
+            [ p [] [ text ( toString model.node.id ) ]
+            , p [] [ text model.node.url ]
+            , p [] [ text ( toString model.node.uptime ) ]
+            , p [] [ text model.node.name ]
+            ]
+
     ]
 
 
@@ -57,6 +86,12 @@ subscriptions model =
 -- INIT
 init : (Model, Cmd none)
 init =
-    ({ nodes = [], name = "test" }, Cmd.none)
+    ({ node =
+    { id = 1
+    , url = "http://localhost:1337/84.210.50.24:20000/api?command={%22id%22:1,%22method%22:%22info%22,%22params%22:[]}&nocache=1521910258052"
+    , name = "pengane"
+    , uptime = 0
+    }
+    , name = "test" }, Cmd.none)
 
 
