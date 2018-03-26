@@ -5,13 +5,10 @@ type alias NodeRes =
     , id : Int
     }
 
-
-
-type alias GpuRes =
+type alias DevicesRes =
     { devices : List DeviceRes
     , id : Int
     }
-
 
 type alias DeviceRes =
     { device_id : Int

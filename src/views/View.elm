@@ -4,6 +4,7 @@ import Html exposing (..)
 import Model exposing (..)
 import Html.Events exposing (onClick)
 import Miners exposing (..)
+import Messages exposing (..)
 
 
 

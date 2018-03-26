@@ -8732,7 +8732,7 @@ var _user$project$ApiResponses$NodeRes = F2(
 	function (a, b) {
 		return {uptime: a, id: b};
 	});
-var _user$project$ApiResponses$GpuRes = F2(
+var _user$project$ApiResponses$DevicesRes = F2(
 	function (a, b) {
 		return {devices: a, id: b};
 	});
@@ -8744,6 +8744,24 @@ var _user$project$Graphicscard$Graphicscard = F2(
 	function (a, b) {
 		return {id: a, name: b};
 	});
+var _user$project$Miners$deviceDecoder = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'name',
+	_elm_lang$core$Json_Decode$string,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'device_id',
+		_elm_lang$core$Json_Decode$int,
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$ApiResponses$DeviceRes)));
+var _user$project$Miners$cardsDecoder = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'id',
+	_elm_lang$core$Json_Decode$int,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'devices',
+		_elm_lang$core$Json_Decode$list(_user$project$Miners$deviceDecoder),
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$ApiResponses$DevicesRes)));
 var _user$project$Miners$minerDecoder = A3(
 	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 	'uptime',
@@ -8757,6 +8775,14 @@ var _user$project$Miners$Miners = F5(
 	function (a, b, c, d, e) {
 		return {name: a, url: b, uptime: c, id: d, cards: e};
 	});
+var _user$project$Messages$CardsFetched = function (a) {
+	return {ctor: 'CardsFetched', _0: a};
+};
+var _user$project$Messages$FetchCards = {ctor: 'FetchCards'};
+var _user$project$Messages$NodeDataFetched = function (a) {
+	return {ctor: 'NodeDataFetched', _0: a};
+};
+var _user$project$Messages$Fetch = {ctor: 'Fetch'};
 var _user$project$Model$init = {
 	ctor: '_Tuple2',
 	_0: {
@@ -8771,53 +8797,68 @@ var _user$project$Model$init = {
 	},
 	_1: _elm_lang$core$Platform_Cmd$none
 };
-var _user$project$Model$Model = F2(
-	function (a, b) {
-		return {miner: a, name: b};
-	});
-var _user$project$Model$NodeDataFetched = function (a) {
-	return {ctor: 'NodeDataFetched', _0: a};
+var _user$project$Model$fetchCards = function (miner) {
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$Messages$CardsFetched,
+		A2(_elm_lang$http$Http$get, miner.url, _user$project$Miners$cardsDecoder));
 };
 var _user$project$Model$fetch = function (miner) {
 	return A2(
 		_elm_lang$http$Http$send,
-		_user$project$Model$NodeDataFetched,
+		_user$project$Messages$NodeDataFetched,
 		A2(_elm_lang$http$Http$get, miner.url, _user$project$Miners$minerDecoder));
 };
-var _user$project$Model$Fetch = {ctor: 'Fetch'};
+var _user$project$Model$Model = F2(
+	function (a, b) {
+		return {miner: a, name: b};
+	});
 var _user$project$Subscriptions$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
 var _user$project$Update$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
-		if (_p0.ctor === 'Fetch') {
-			return {
-				ctor: '_Tuple2',
-				_0: model,
-				_1: _user$project$Model$fetch(model.miner)
-			};
-		} else {
-			if (_p0._0.ctor === 'Ok') {
-				var _p1 = _p0._0._0;
+		switch (_p0.ctor) {
+			case 'Fetch':
 				return {
 					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							miner: A5(
-								_user$project$Miners$Miners,
-								model.miner.name,
-								model.miner.url,
-								_p1.id,
-								_p1.uptime,
-								{ctor: '[]'})
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
+					_0: model,
+					_1: _user$project$Model$fetch(model.miner)
 				};
-			} else {
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-			}
+			case 'NodeDataFetched':
+				if (_p0._0.ctor === 'Ok') {
+					var _p1 = _p0._0._0;
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								miner: A5(
+									_user$project$Miners$Miners,
+									model.miner.name,
+									model.miner.url,
+									_p1.id,
+									_p1.uptime,
+									{ctor: '[]'})
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				}
+			case 'FetchCards':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$Model$fetchCards(model.miner)
+				};
+			default:
+				if (_p0._0.ctor === 'Ok') {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				} else {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				}
 		}
 	});
 var _user$project$View$viewNode = function (miner) {
@@ -8904,7 +8945,7 @@ var _user$project$View$view = function (model) {
 						_elm_lang$html$Html$button,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(_user$project$Model$Fetch),
+							_0: _elm_lang$html$Html_Events$onClick(_user$project$Messages$Fetch),
 							_1: {ctor: '[]'}
 						},
 						{

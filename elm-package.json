@@ -8,7 +8,8 @@
         "src/models",
         "src/subscriptions",
         "src/update",
-        "src/views"
+        "src/views",
+        "src/msg"
 
     ],
     "exposed-modules": [],

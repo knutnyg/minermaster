@@ -3,20 +3,20 @@ module Model exposing (..)
 import Miners exposing (..)
 import Http exposing (..)
 import ApiResponses exposing (..)
+import Messages exposing (..)
 
 type alias Model =
     { miner : Miners
     , name : String
     }
 
-type Msg =
-    Fetch |
-    NodeDataFetched (Result Http.Error NodeRes)
-
-
 fetch : Miners -> Cmd Msg
 fetch miner =
     Http.send NodeDataFetched (Http.get miner.url minerDecoder)
+
+fetchCards : Miners -> Cmd Msg
+fetchCards miner =
+    Http.send CardsFetched (Http.get miner.url cardsDecoder)
 
 init : (Model, Cmd Msg)
 init =
