@@ -1,9 +1,10 @@
 module Subscriptions exposing (..)
 
 import Model exposing (..)
-import Messages exposing (Msg)
+import Messages exposing (..)
+
+import Time exposing (..)
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
-
+  Time.every (10*Time.second) Tick

@@ -4,6 +4,7 @@ import Model exposing (..)
 import Messages exposing (..)
 import Miners exposing (..)
 import Graphicscard exposing (..)
+import Task exposing (..)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -13,7 +14,7 @@ update msg model =
             ( model, fetch model.miner )
 
         NodeDataFetched (Ok res) ->
-            ( { model | miner = Miners model.miner.name model.miner.url res.id res.uptime [] }, Cmd.none )
+            ( { model | miner = Miners model.miner.name model.miner.url res.id res.uptime [] } )
 
         NodeDataFetched (Err _) ->
             ( model, Cmd.none )
@@ -29,3 +30,6 @@ update msg model =
 
         CardsFetched (Err _) ->
             ( model, Cmd.none )
+
+        Tick time ->
+            model ! [ fetch model.miner ]

@@ -4,6 +4,8 @@ import Miners exposing (..)
 import Http exposing (..)
 import ApiResponses exposing (..)
 import Messages exposing (..)
+import Task exposing (..)
+import Time exposing (..)
 
 type alias Model =
     { miner : Miners
@@ -31,4 +33,4 @@ init =
         , cards = []
         }
       , name = "Pengane"
-      }, Cmd.none )
+      } ! [ Task.perform Tick Time.now])
