@@ -20,12 +20,16 @@ update msg model =
 
         FetchCards ->
             ( model, fetchCards model.miner )
+
         CardsFetched (Ok res) ->
-                let
-                    miner = model.miner
-                    newCards = List.map (\d -> Graphicscard d.device_id d.name) res.devices
-                in
-            ( { model | miner = { miner | cards = newCards} }, Cmd.none )
+            let
+                miner =
+                    model.miner
+
+                newCards =
+                    List.map (\d -> Graphicscard d.device_id d.name) res.devices
+            in
+                ( { model | miner = { miner | cards = newCards } }, Cmd.none )
 
         CardsFetched (Err _) ->
             ( model, Cmd.none )

@@ -7,7 +7,6 @@ import Miners exposing (..)
 import Messages exposing (..)
 
 
-
 view : Model -> Html Msg
 view model =
     div []
@@ -17,9 +16,12 @@ view model =
         , button [ onClick FetchCards ] [ text "fetchCards" ]
         ]
 
+
 viewNode : Miners -> Html Msg
 viewNode miner =
-    let cards = miner.cards
+    let
+        cards =
+            miner.cards
     in
         div []
             [ div [] [ h2 [] [ text miner.name ] ]

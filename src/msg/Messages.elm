@@ -5,9 +5,9 @@ import ApiResponses exposing (..)
 import Time exposing (..)
 
 
-type Msg =
-    Fetch |
-    NodeDataFetched (Result Http.Error NodeRes) |
-    FetchCards |
-    CardsFetched (Result Http.Error DevicesRes) |
-    Tick Time
+type Msg
+    = Fetch
+    | NodeDataFetched (Result Http.Error NodeRes)
+    | FetchCards
+    | CardsFetched (Result Http.Error DevicesRes)
+    | Tick Time
