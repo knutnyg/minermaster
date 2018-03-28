@@ -1,6 +1,6 @@
 module Miners exposing (..)
 
-import Graphicscard exposing (..)
+import Card exposing (..)
 import Json.Decode exposing (Decoder, int, string, list)
 import Json.Decode.Pipeline exposing (decode, required)
 import ApiResponses exposing (..)
@@ -12,7 +12,7 @@ type alias Miners =
     , url : String
     , uptime : Int
     , id : Int
-    , cards : List Graphicscard
+    , cards : List Card
     }
 
 

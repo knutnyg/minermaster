@@ -3,7 +3,7 @@ module Update exposing (..)
 import Model exposing (..)
 import Messages exposing (..)
 import Miners exposing (..)
-import Graphicscard exposing (..)
+import Card exposing (..)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -27,7 +27,7 @@ update msg model =
                     model.miner
 
                 newCards =
-                    List.map (\d -> Graphicscard d.device_id d.name) res.devices
+                    List.map (\d -> Card d.device_id d.name) res.devices
             in
                 ( { model | miner = { miner | cards = newCards } }, Cmd.none )
 
