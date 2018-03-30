@@ -5,6 +5,7 @@ import Messages exposing (..)
 import Miners exposing (..)
 import Card exposing (..)
 import Api exposing (..)
+import CardDetails exposing (..)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -36,13 +37,27 @@ update msg model =
             ( model, Cmd.none )
 
         FetchCardDetails ->
-            ( model, Cmd.none )
+            (model ! fetchCardDetails model.miner.cards)
 
         CardDetailsFetched (Ok res) ->
-            ( model, Cmd.none )
+            let
+                miner =
+                    model.miner
+
+                updatedCards =
+                    List.map
+                        (\c ->
+                            if c.id == res.id then
+                                { c | details = Just (CardDetails res.gpu_temp res.gpu_fan_speed res.gpu_fan_speed_rpm res.gpu_power_usage res.gpu_load res.id) }
+                            else
+                                c
+                        )
+                        miner.cards
+            in
+                ( { model | miner = { miner | cards = updatedCards } }, Cmd.none )
 
         CardDetailsFetched (Err _) ->
             ( model, Cmd.none )
 
         Tick time ->
-            model ! [ fetch model.miner, fetchCards model.miner ]
+            model ! ([ fetch model.miner, fetchCards model.miner ])

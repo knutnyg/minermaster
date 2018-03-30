@@ -12,4 +12,4 @@ type Msg
     | CardsFetched (Result Http.Error DevicesRes)
     | Tick Time
     | FetchCardDetails
-    | CardDetailsFetched (Result Http.Error DevicesRes)
+    | CardDetailsFetched (Result Http.Error CardDetailsRes)

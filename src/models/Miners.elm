@@ -21,17 +21,3 @@ minerDecoder =
     decode NodeRes
         |> required "id" int
         |> required "uptime" int
-
-
-deviceDecoder : Decoder DeviceRes
-deviceDecoder =
-    decode DeviceRes
-        |> required "device_id" int
-        |> required "name" string
-
-
-cardsDecoder : Decoder DevicesRes
-cardsDecoder =
-    decode DevicesRes
-        |> required "devices" (list deviceDecoder)
-        |> required "id" int

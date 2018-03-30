@@ -4,6 +4,7 @@ import Html exposing (..)
 import Model exposing (..)
 import Html.Events exposing (onClick)
 import Miners exposing (..)
+import Card exposing (..)
 import Messages exposing (..)
 
 
@@ -13,7 +14,7 @@ view model =
         [ div [] [ h1 [] [ text "Minermaster" ] ]
         , viewNode model.miner
         , button [ onClick Fetch ] [ text "fetch" ]
-        , button [ onClick FetchCards ] [ text "fetchCards" ]
+        , button [ onClick FetchCardDetails ] [ text "Details" ]
         ]
 
 
@@ -37,5 +38,18 @@ viewNode miner =
                     )
                 ]
             , p [] [ text ("Uptime: " ++ (toString miner.uptime)) ]
-            , div [] (List.map (\card -> p [] [ text (card.name) ]) miner.cards)
+            , div [] (List.map viewCard miner.cards)
             ]
+
+
+viewCard : Card -> Html Msg
+viewCard card =
+    div []
+        [ h3 [] [ text card.name ]
+        , case card.details of
+            Just details ->
+                p [] [ text "test" ]
+
+            Nothing ->
+                text ""
+        ]
