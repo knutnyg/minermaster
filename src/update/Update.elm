@@ -11,6 +11,9 @@ import CardDetails exposing (..)
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        Init ->
+            model ! [ (fetch model.miner), (fetchCards model.miner) ]
+
         Fetch ->
             ( model, fetch model.miner )
 
@@ -60,4 +63,4 @@ update msg model =
             ( model, Cmd.none )
 
         Tick time ->
-            model ! ([ fetch model.miner, fetchCards model.miner ])
+            model ! fetchCardDetails model.miner.cards

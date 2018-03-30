@@ -6,7 +6,8 @@ import Time exposing (..)
 
 
 type Msg
-    = Fetch
+    = Init
+    | Fetch
     | NodeDataFetched (Result Http.Error NodeRes)
     | FetchCards
     | CardsFetched (Result Http.Error DevicesRes)

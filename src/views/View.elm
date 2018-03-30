@@ -48,7 +48,7 @@ viewCard card =
         [ h3 [] [ text card.name ]
         , case card.details of
             Just details ->
-                p [] [ text "test" ]
+                p [] [ text ("Temperature: " ++ toString details.temp) ]
 
             Nothing ->
                 text ""
