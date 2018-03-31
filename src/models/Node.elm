@@ -1,4 +1,4 @@
-module Miners exposing (..)
+module Node exposing (..)
 
 import Card exposing (..)
 import Json.Decode exposing (Decoder, int, string, list)
@@ -7,7 +7,7 @@ import ApiResponses exposing (..)
 import Http exposing (..)
 
 
-type alias Miners =
+type alias Node =
     { name : String
     , url : String
     , uptime : Int

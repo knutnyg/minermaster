@@ -25,5 +25,5 @@ type alias CardDetailsRes =
     , gpu_power_usage : Float
     , gpu_fan_speed : Int
     , gpu_fan_speed_rpm : Int
-    , id : Int
+    , device_id : Int
     }

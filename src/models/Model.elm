@@ -1,6 +1,6 @@
 module Model exposing (..)
 
-import Miners exposing (..)
+import Node exposing (..)
 import Messages exposing (..)
 import Task exposing (..)
 import Time exposing (..)
@@ -8,15 +8,15 @@ import Api exposing (..)
 
 
 type alias Model =
-    { miner : Miners
-    , name : String
+    { pengane : Node
+    , knutminer : Maybe Node
     }
 
 
 init : ( Model, Cmd Msg )
 init =
     let
-        miner =
+        pengane =
             { id = 1
             , url = "http://localhost:1337/84.210.50.24:20000/api?command={\"id\":1,\"method\":\"info\",\"params\":[]}&nocache=1521910258052"
             , name = "pengane"
@@ -24,7 +24,7 @@ init =
             , cards = []
             }
     in
-        { name = "Pengane"
-        , miner = miner
+        { pengane = pengane
+        , knutminer = Nothing
         }
-            ! [ (fetch miner), (fetchCards miner) ]
+            ! [ (fetch pengane), (fetchCards pengane) ]

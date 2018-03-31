@@ -11,7 +11,7 @@ type alias CardDetails =
     , fanRpm : Int
     , pwrUsage : Float
     , load : Int
-    , id : Int
+    , device_id : Int
     }
 
 
@@ -23,4 +23,4 @@ cardDetailsDecoder =
         |> required "gpu_power_usage" float
         |> required "gpu_fan_speed" int
         |> required "gpu_fan_speed_rpm" int
-        |> required "id" int
+        |> required "device_id" int
