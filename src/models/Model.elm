@@ -5,11 +5,13 @@ import Messages exposing (..)
 import Task exposing (..)
 import Time exposing (..)
 import Api exposing (..)
+import Banken exposing (..)
 
 
 type alias Model =
     { pengane : Node
     , knutminer : Maybe Node
+    , banken : Banken
     }
 
 
@@ -23,8 +25,12 @@ init =
             , uptime = -1
             , cards = []
             }
+
+        banken =
+            Banken "1JhrSWPuHgV71vzPZdNiQyamVYotuyKD4H" 0.0 0.0
     in
         { pengane = pengane
         , knutminer = Nothing
+        , banken = banken
         }
-            ! [ (fetch pengane), (fetchCards pengane) ]
+            ! [ (fetch pengane), (fetchCards pengane), (fetchWalletBalance banken) ]

@@ -62,5 +62,21 @@ update msg model =
         CardDetailsFetched (Err _) ->
             ( model, Cmd.none )
 
+        FetchWalletBalance ->
+            ( model, Cmd.none )
+
+        WalletBalanceFetched (Ok strBalance) ->
+            let
+                banken =
+                    model.banken
+
+                balance =
+                    (String.toFloat strBalance |> Result.withDefault 0)
+            in
+                ( { model | banken = { banken | balance = balance } }, Cmd.none )
+
+        WalletBalanceFetched (Err _) ->
+            ( model, Cmd.none )
+
         Tick time ->
             model ! fetchCardDetails model.pengane.cards

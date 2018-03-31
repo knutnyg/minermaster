@@ -14,3 +14,5 @@ type Msg
     | Tick Time
     | FetchCardDetails
     | CardDetailsFetched (Result Http.Error CardDetailsRes)
+    | FetchWalletBalance
+    | WalletBalanceFetched (Result Http.Error String)

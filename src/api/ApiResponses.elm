@@ -27,3 +27,8 @@ type alias CardDetailsRes =
     , gpu_fan_speed_rpm : Int
     , device_id : Int
     }
+
+
+type alias BalanceRes =
+    { value : Float
+    }

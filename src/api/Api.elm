@@ -1,6 +1,7 @@
 module Api exposing (..)
 
 import Node exposing (..)
+import Banken exposing (..)
 import Http exposing (..)
 import Messages exposing (..)
 import Card exposing (..)
@@ -33,3 +34,13 @@ fetchCardDetails cards =
                 Http.send CardDetailsFetched (Http.get url cardDetailsDecoder)
         )
         cards
+
+
+fetchWalletBalance : Banken -> Cmd Msg
+fetchWalletBalance banken =
+    let
+        url =
+            "https://blockchain.info/q/addressbalance/" ++ banken.wallet ++ "?confirmations=6"
+    in
+        Http.send WalletBalanceFetched <|
+            Http.getString url
